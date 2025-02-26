@@ -1,0 +1,19 @@
+.container {
+  padding: 2em;
+  height: 100%;
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  li,
+  a {
+    display: flex;
+    gap: 0.5em;
+    font-size: 1.2rem;
+    font-weight: var(--semibold);
+  }
+}
