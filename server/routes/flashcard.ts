@@ -50,17 +50,17 @@ router.post("/create-one", async (req, res) => {
   });
 });
 
-router.patch("/edit", async (req, res) => {
+router.post("/batch-update", async (req, res) => {
   errorBoundary(req, res, async (req, res) => {
-    const { id, front, back } = req.body;
-    if (!id || !front || !back) {
-      return res.status(400).json({ message: "Missing flashcard data" });
+    const { flashcards, classId } = req.body;
+    if (!flashcards || !classId) {
+      return res.status(400).json({ message: "Missing flashcards or classId" });
     }
-    const flashcards = await turso.editFlashcard(id, front, back);
-    if (isError(flashcards)) {
-      return res.status(flashcards.code).json({ message: flashcards.message });
+    const response = await turso.updateFlashcards(flashcards, classId);
+    if (isError(response)) {
+      return res.status(response.code).json({ message: response.message });
     }
-    return res.status(200).json(flashcards);
+    return res.status(200).json(response);
   });
 });
 

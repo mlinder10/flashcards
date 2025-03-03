@@ -1,3 +1,4 @@
+import styles from "./create.module.css";
 import { FaPlus } from "react-icons/fa";
 import Modal from "../../components/modal/modal";
 import { useState } from "react";
@@ -19,10 +20,13 @@ export default function Create() {
   }
 
   return (
-    <main>
-      <div>
+    <main className={styles.main}>
+      <div className={styles.header}>
         <h1>Create a Class</h1>
-        <button onClick={() => setIsShowing(true)}>
+        <button
+          onClick={() => setIsShowing(true)}
+          className={styles["create-btn"]}
+        >
           <FaPlus />
           <span>Create</span>
         </button>
@@ -34,7 +38,11 @@ export default function Create() {
           </li>
         ))}
       </ul>
-      <Modal show={isShowing} close={() => setIsShowing(false)}>
+      <Modal
+        show={isShowing}
+        close={() => setIsShowing(false)}
+        title="Create a Class"
+      >
         <CreateModal onCreate={handleCreate} />
       </Modal>
     </main>
@@ -47,9 +55,11 @@ type CreateModalProps = {
 
 function CreateModal({ onCreate }: CreateModalProps) {
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [protection, setProtection] = useState<ProtectionLevel>("public");
   const create = useMutation({
-    mutation: async () => (await api.createClass(name, protection)).data,
+    mutation: async () =>
+      (await api.createClass(name, description, protection)).data,
   });
 
   async function handleCreate() {
@@ -61,27 +71,31 @@ function CreateModal({ onCreate }: CreateModalProps) {
 
   return (
     <div>
-      <h1>Create a Class</h1>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <label htmlFor="protection">Protection</label>
-        <select
-          id="protection"
-          value={protection}
-          onChange={(e) => setProtection(e.target.value as ProtectionLevel)}
-        >
-          <option value="public">Public</option>
-          <option value="private">Private</option>
-          <option value="unlisted">Unlisted</option>
-        </select>
-        <button onClick={handleCreate}>Create</button>
-      </div>
+      <label htmlFor="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <label htmlFor="description">Description</label>
+      <input
+        type="text"
+        id="description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <label htmlFor="protection">Protection</label>
+      <select
+        id="protection"
+        value={protection}
+        onChange={(e) => setProtection(e.target.value as ProtectionLevel)}
+      >
+        <option value="public">Public</option>
+        <option value="private">Private</option>
+        <option value="unlisted">Unlisted</option>
+      </select>
+      <button onClick={handleCreate}>Create</button>
     </div>
   );
 }

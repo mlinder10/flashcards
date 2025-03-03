@@ -6,9 +6,16 @@ export type Flashcard = RawFlashcard & {
 };
 
 export type RawFlashcard = {
-  id?: string;
   front: string;
   back: string;
+};
+
+export type UnsavedFlashcard = RawFlashcard & { id: string };
+
+export type CourseInfo = {
+  courseName: string;
+  university: string;
+  level: string;
 };
 
 export type GenerateType = "syllabus" | "notes" | "courseInfo";
@@ -29,6 +36,7 @@ export type ProtectionLevel = "public" | "private" | "unlisted";
 export type Class = {
   id: string;
   name: string;
+  description: string;
   createdAt: number;
   userId: string;
   protection: ProtectionLevel;

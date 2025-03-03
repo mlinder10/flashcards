@@ -1,6 +1,13 @@
 import { createClient } from "@libsql/client";
 import { config } from "dotenv";
-import { Class, Flashcard, ProtectionLevel, RawFlashcard, User } from "./types";
+import {
+  Class,
+  Flashcard,
+  ProtectionLevel,
+  RawFlashcard,
+  UnsavedFlashcard,
+  User,
+} from "./types";
 import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 config();
@@ -237,6 +244,7 @@ export const turso = {
         classes.push({
           id: row.id as string,
           name: row.name as string,
+          description: row.description as string,
           userId: row.user_id as string,
           protection: row.protection as ProtectionLevel,
           createdAt: row.created_at as number,
@@ -251,6 +259,7 @@ export const turso = {
 
   createClass: async (
     name: string,
+    description: string,
     protection: ProtectionLevel,
     userId: string,
     classId = v4()
@@ -260,16 +269,23 @@ export const turso = {
       const rs = await client.execute({
         sql: `
           INSERT INTO classes
-            (id, name, user_id, protection, created_at)
+            (id, name, description, user_id, protection, created_at)
           VALUES
-            (?, ?, ?, ?, ?)
+            (?, ?, ?, ?, ?, ?)
         `,
-        args: [classId, name, userId, protection, currentTime],
+        args: [classId, name, description, userId, protection, currentTime],
       });
       if (rs.rowsAffected !== 1) {
         return { code: 500, message: "Failed to create class" };
       }
-      return { id: classId, name, userId, protection, createdAt: currentTime };
+      return {
+        id: classId,
+        name,
+        description,
+        userId,
+        protection,
+        createdAt: currentTime,
+      };
     } catch (error) {
       console.error(error);
       return { code: 500, message: "Failed to create class" };
@@ -377,14 +393,13 @@ export const turso = {
   },
 
   createFlashcards: async (
-    rawCards: RawFlashcard[],
+    rawCards: UnsavedFlashcard[],
     classId: string
   ): Promise<TursoResponse<Flashcard[]>> => {
     try {
       const currentTime = Date.now();
       const flashcards = rawCards.map((c) => {
         return {
-          id: c.id ?? v4(),
           ...c,
           createdAt: currentTime,
           updatedAt: currentTime,
@@ -414,31 +429,66 @@ export const turso = {
     }
   },
 
-  editFlashcard: async (
-    id: string,
-    front: string,
-    back: string
+  updateFlashcards: async (
+    flashcards: UnsavedFlashcard[],
+    classId: string
   ): Promise<TursoResponse<string>> => {
     try {
-      const currentTime = Date.now();
       const rs = await client.execute({
-        sql: `
-          UPDATE flashcards
-            SET front = ?,
-            back = ?,
-            updated_at = ?
-          WHERE
-            id = ?
-        `,
-        args: [front, back, currentTime, id],
+        sql: "SELECT id FROM flashcards WHERE class_id = ?",
+        args: [classId],
       });
-      if (rs.rowsAffected !== 1) {
-        return { code: 404, message: "Failed to edit flashcard" };
+      const ids = rs.rows.map((r) => r.id as string);
+      let existingCards: UnsavedFlashcard[] = [];
+      let newCards: UnsavedFlashcard[] = [];
+      for (const card of flashcards) {
+        if (ids.includes(card.id)) {
+          existingCards.push(card);
+        } else {
+          newCards.push(card);
+        }
+      }
+      const currentTime = Date.now();
+      const updates = existingCards.map((c) => {
+        return {
+          sql: "UPDATE flashcards SET front = ?, back = ?, updated_at = ? WHERE id = ?",
+          args: [c.front, c.back, currentTime, c.id],
+        };
+      });
+      const insertSql =
+        newCards.length === 0
+          ? `SELECT id FROM flashcards WHERE 1 = 0`
+          : `
+        INSERT INTO flashcards
+          (id, front, back, created_at, updated_at, class_id)
+        VALUES
+          ${newCards.map((_) => `(?, ?, ?, ?, ?, ?)`).join(",\n")}
+      `;
+      const insertArgs =
+        newCards.length === 0
+          ? []
+          : newCards.flatMap((c) => [
+              c.id,
+              c.front,
+              c.back,
+              currentTime,
+              currentTime,
+              classId,
+            ]);
+      const rs2 = await client.batch([
+        { sql: insertSql, args: insertArgs },
+        ...updates,
+      ]);
+      if (rs2.length !== 1 + updates.length) {
+        return { code: 500, message: "Failed to update flashcards" };
+      }
+      if (rs2[0].rowsAffected !== newCards.length) {
+        return { code: 500, message: "Failed to update existing flashcards" };
       }
       return "Success";
     } catch (error) {
       console.error(error);
-      return { code: 500, message: "Failed to edit flashcard" };
+      return { code: 500, message: "Failed to update flashcards" };
     }
   },
 

@@ -3,6 +3,7 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 type QueryProps<T> = {
   initialData: T;
   query: () => Promise<T>;
+  callOnMount?: boolean;
 };
 
 type QueryRespone<T> = {
@@ -10,35 +11,55 @@ type QueryRespone<T> = {
   loading: boolean;
   error: string | null;
   setData: Dispatch<SetStateAction<T>>;
+  fetchData: () => Promise<void>;
+  fetchDataWithoutMutation: () => Promise<T | null>;
 };
 
 export function useQuery<T>({
   initialData,
   query,
+  callOnMount = true,
 }: QueryProps<T>): QueryRespone<T> {
   const [data, setData] = useState<T>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await query();
-        setData(res);
-      } catch (error: any) {
-        console.error(error);
-        setError(error.response.data.message);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchData() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await query();
+      setData(res);
+    } catch (error: any) {
+      console.error(error);
+      setError(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    fetchData();
+  async function fetchDataWithoutMutation() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await query();
+      return res;
+    } catch (error: any) {
+      console.error(error);
+      setError(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+    return null;
+  }
+
+  useEffect(() => {
+    if (callOnMount) {
+      fetchData();
+    }
   }, []);
 
-  return { data, loading, error, setData };
+  return { data, loading, error, setData, fetchData, fetchDataWithoutMutation };
 }
 
 type MutationProps<T> = {
@@ -61,7 +82,7 @@ export function useMutation<T>({
     setLoading(true);
     setError(null);
     try {
-      const res = await mutation(args);
+      const res = await mutation(...args);
       return res;
     } catch (error) {
       setError("Failed to fetch data");

@@ -1,6 +1,8 @@
 .container {
   padding: 2em;
   height: 100%;
+  background-color: var(--background-secondary);
+  border-right: thin solid var(--border);
 
   ul {
     list-style: none;
@@ -9,11 +11,21 @@
     gap: 2em;
   }
 
+  button {
+    background-color: transparent;
+  }
+
   li,
-  a {
+  a,
+  button {
     display: flex;
-    gap: 0.5em;
+    align-items: center;
+    gap: 0.75em;
     font-size: 1.2rem;
     font-weight: var(--semibold);
+  }
+
+  a.active {
+    color: var(--accent);
   }
 }

@@ -5,31 +5,51 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 export default function Sidenav() {
-  const [isOpen, setIsOpen] = useState(true);
+  // get route
+  const [isOpen, setIsOpen] = useState(checkStoredIsOpen());
+  const baseRoute = window.location.pathname.split("/")[1];
+
+  function toggleOpen() {
+    setIsOpen(!isOpen);
+    localStorage.setItem("isOpen", JSON.stringify(!isOpen));
+  }
+
+  function checkStoredIsOpen() {
+    const storedIsOpen = localStorage.getItem("isOpen");
+    if (storedIsOpen === null) return false;
+    const parsedIsOpen = JSON.parse(storedIsOpen);
+    if (parsedIsOpen === null) return false;
+    return parsedIsOpen;
+  }
 
   return (
     <nav className={styles.container}>
       <ul>
         <li>
-          <button onClick={() => setIsOpen(!isOpen)}>
+          <button onClick={toggleOpen}>
             <FaBars />
           </button>
-          <a href="/">Logo</a>
         </li>
         <li>
-          <Link to="/">
+          <Link to="/" className={baseRoute === "" ? styles.active : ""}>
             <FaHome />
             {isOpen && <span>Home</span>}
           </Link>
         </li>
         <li>
-          <Link to="/create">
+          <Link
+            to="/create"
+            className={baseRoute === "create" ? styles.active : ""}
+          >
             <FaPlus />
             {isOpen && <span>Create</span>}
           </Link>
         </li>
         <li>
-          <Link to="/discover">
+          <Link
+            to="/discover"
+            className={baseRoute === "discover" ? styles.active : ""}
+          >
             <FaMagnifyingGlass />
             {isOpen && <span>Discover</span>}
           </Link>

@@ -11,7 +11,7 @@ export default function Alert({ show, children }: AlertProps) {
 
   return (
     <div className={styles.background}>
-      <div className={styles.container}>{children}</div>;
+      <div className={styles.container}>{children}</div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import styles from "./homeauthenticated.module.css";
 import { useQuery } from "../../hooks/api-call";
 import { api } from "../../api";
 import Sidenav from "../../components/sidenav/sidenav";
@@ -12,8 +13,8 @@ export default function HomeAuthenticated() {
   return (
     <>
       <Sidenav />
-      <main>
-        <p>Your Classes</p>
+      <main className={styles.main}>
+        <h1>Your Classes</h1>
         <ul>
           {classes.data.map((c) => (
             <li key={c.id}>

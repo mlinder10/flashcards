@@ -55,10 +55,10 @@ export function isSubscribed(subscriptionEnd: number | null) {
 
 export function getLimitAndOffset(req: Request, maxLimit: number = 10) {
   let { limit, offset }: { limit?: number; offset?: number } = req.query;
-  if (!limit || typeof limit !== "number" || limit < 1) {
+  if (!limit || limit < 1) {
     limit = maxLimit;
   }
-  if (!offset || typeof offset !== "number" || offset < 0) {
+  if (!offset || offset < 0) {
     offset = 0;
   }
   return { limit, offset };

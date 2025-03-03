@@ -17,11 +17,16 @@ router.get("/", async (req, res) => {
 
 router.post("/create", async (req, res) => {
   errorBoundary(req, res, async (req, res) => {
-    const { name, protection } = req.body;
+    const { name, description, protection } = req.body;
     if (!name || !protection) {
       return res.status(400).json({ message: "Missing class data" });
     }
-    const class_ = await turso.createClass(name, protection, req.user.id);
+    const class_ = await turso.createClass(
+      name,
+      description,
+      protection,
+      req.user.id
+    );
     if (isError(class_)) {
       return res.status(class_.code).json({ message: class_.message });
     }
