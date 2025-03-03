@@ -1,0 +1,6 @@
+name: mlx-lm
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - conda-forge::mlx-lm
