@@ -1,7 +1,7 @@
 from mlx_lm import load, generate
 
-model, tokenizer = load("mlx-community/DeepSeek-R1-Distill-Qwen-7B")
-
+# model, tokenizer = load("mlx-community/DeepSeek-R1-Distill-Qwen-7B")
+model, tokenizer = load("mlx-community/Meta-Llama-3-8B-Instruct-4bit")
 prompt = "hello"
 
 if tokenizer.chat_template is not None:
