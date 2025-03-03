@@ -1,0 +1,42 @@
+.main {
+  padding-top: 2em;
+  padding-inline: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.create-btn {
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 2em;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  label {
+    font-weight: var(--semibold);
+  }
+}
+
+.modal-create-btn {
+  display: flex;
+  justify-content: center;
+  padding-block: 0.5em;
+  font-size: 1rem;
+  border-radius: 0.5em;
+}

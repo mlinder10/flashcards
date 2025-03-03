@@ -1,0 +1,40 @@
+curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$YOUR_API_KEY" \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{
+  "contents": [{
+    "parts":[{"text": "Explain how AI works"}]
+    }]
+   }'
+
+###
+
+POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAjnhfeIZ8e4_77W1yN3pfA8pPgFeMujhQ
+Content-Type: application/json
+
+{
+  "contents": [{
+    "parts":[{"text": "Explain how AI works"}]
+  }]
+}
+
+###
+POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyAjnhfeIZ8e4_77W1yN3pfA8pPgFeMujhQ
+Content-Type: application/json
+
+{
+  "contents": [{
+    "parts":[{"text": "Explain how AI works"}]
+  }]
+}
+
+###
+POST http://127.0.0.1:5000
+Content-Type: application/json
+
+{
+  "prompts": [
+    "I'm going to give you some information about a course. I'd like you to generate flashcards to teach the course material. Please respond in the following json format: [{ front: string, back: string }]. Your response string should not include any markdown formatting. Please be sure to generate flashcards related to the course content, not the course information. You will need to use external resources and hypothesize the specifics of the course. University: University of South Carolina, Department: Psychology, Course Number: PSYC 420, Course Name: Survey of Developmental Psychology"
+  ],
+  "tokenLimit": 256
+}

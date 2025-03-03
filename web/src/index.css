@@ -1,0 +1,93 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-family: Helvetica, sans-serif;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --primary: #222;
+  --secondary: #444;
+  --background: #eee;
+  --background-secondary: #ccc;
+  --border: #aaa;
+  --accent: #0d5;
+  --accent-secondary: #0c3;
+  --danger: #c33;
+
+  --semibold: 800;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #eee;
+    --secondary: #bbb;
+    --background: #222;
+    --background-secondary: #444;
+    --border: #888;
+    --accent: #0c3;
+    --accent-secondary: #0d5;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root:has(nav) {
+  display: flex;
+  height: 100%;
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: inherit;
+  transition: 0.3s ease-in-out;
+}
+a:hover {
+  color: var(--accent);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: var(--accent);
+  transition: 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+button:hover,
+button:focus {
+  background-color: var(--accent-secondary);
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

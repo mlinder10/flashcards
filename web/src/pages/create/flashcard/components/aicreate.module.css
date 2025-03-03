@@ -1,0 +1,137 @@
+.prompt-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ai-btns-container {
+  margin-top: 0.5em;
+  margin-bottom: 2em;
+  display: flex;
+  gap: 0.25em;
+
+  button {
+    padding-block: 0.5em;
+    font-weight: var(--semibold);
+    flex: 1;
+    background-color: transparent;
+    justify-content: center;
+  }
+  button.active {
+    border-bottom: thin solid var(--accent);
+  }
+  .generate-btn {
+    color: var(--accent);
+    background-color: var(--background-secondary);
+    border-radius: 0.5em;
+    padding-block: 0.25em;
+  }
+}
+
+/* Prompr */
+
+.subtitle {
+  font-size: 1.2rem;
+  font-weight: var(--semibold);
+  margin-bottom: 1em;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    padding: 0.5em;
+  }
+}
+
+.notes-container,
+.syllabus-container,
+.course-info-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Grid */
+
+.grid-subheader {
+  display: flex;
+  justify-content: space-between;
+
+  .grid-subheader-right {
+    display: flex;
+    gap: 1em;
+    margin-top: 0.5em;
+  }
+
+  button {
+    background-color: transparent;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+  }
+  .select-btn {
+    background-color: var(--background-secondary);
+  }
+  .save-btn {
+    background-color: var(--accent);
+  }
+  .delete-btn {
+    background-color: var(--background-secondary);
+    color: var(--danger);
+  }
+}
+
+.grid {
+  padding-top: 2em;
+  padding-bottom: 4em;
+  gap: 1em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.ai-card {
+  display: flex;
+  flex-direction: column;
+  border: thin solid var(--border);
+  border-radius: 1em;
+  cursor: pointer;
+  transition: 0.2s;
+
+  p {
+    padding: 1em;
+    line-height: 1.4rem;
+  }
+  p:last-child {
+    border-top: thin solid var(--border);
+  }
+}
+.ai-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 3px var(--accent);
+}
+
+.loading-container {
+  display: grid;
+  place-items: center;
+  flex: 1;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+  }
+
+  p:first-child {
+    font-size: 1.2rem;
+    font-weight: var(--semibold);
+  }
+  p:nth-child(2) {
+    color: var(--secondary);
+  }
+}

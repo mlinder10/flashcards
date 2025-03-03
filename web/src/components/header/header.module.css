@@ -1,0 +1,23 @@
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: var(--header-height);
+  align-items: center;
+  place-items: center;
+  background-color: var(--background-secondary);
+  border-bottom: thin solid var(--border);
+  padding-inline: 3rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: var(--semibold);
+}
+
+.toolbar-left {
+  justify-self: flex-start;
+}
+
+.toolbar-right {
+  justify-self: flex-end;
+}
